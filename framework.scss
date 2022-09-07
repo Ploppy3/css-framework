@@ -8,6 +8,7 @@
 // - sf-pointer-events
 // - sf-aspect-ratio
 // - sf-group
+// - sf-table
 // -------------------
 // brand prefix:
 // -------------------
@@ -44,7 +45,10 @@ $sizes: (
 $colors: (
   "primary": $primary,
   "secondary": $secondary,
+  "light-gray": $light-gray,
   "medium-gray": $medium-gray,
+  "green": $green,
+  "red": $red,
 );
 // -------------------
 // -------------------
@@ -337,6 +341,9 @@ $size in $sizes {
   &.--#{$p}justify-content-center {
     justify-content: center;
   }
+  &.--#{$p}justify-content-flex-start {
+    justify-content: flex-start;
+  }
   &.--#{$p}justify-content-flex-end {
     justify-content: flex-end;
   }
@@ -355,6 +362,61 @@ $size in $sizes {
   $maxWidth in $breakpoints {
     @media screen and (max-width: $maxWidth) {
       @include flex-rules($breakpoint + '\\:');
+    }
+  }
+}
+// -------------------
+/// table
+.sf-table {
+  display: table;
+  // table row
+  > * {
+    display: table-row;
+    background-color: $white;
+    &:nth-child(odd) {
+      background-color: $light-gray;
+    }
+    // table cell
+    > * {
+      display: table-cell;
+      padding: 8px 16px;
+    }
+  }
+  @each $bp,
+  $maxWidth in $breakpoints {
+    @media screen and (max-width: $maxWidth) {
+      &.--#{$bp}\:break {
+        display: block;
+        // table row
+        > * {
+          display: block;
+          border: 1px solid #ccc;
+          border-radius: 16px;
+          margin-top: 16px;
+          padding: 16px;
+          &:nth-child(odd) {
+            background-color: $white;
+          }
+          // table cell
+          > * {
+            padding: 0;
+            &:not(:first-child) {
+              padding-top: 0;
+              margin-top: 16px;
+            }
+            &:not(:last-child) {
+              padding-bottom: 0;
+            }
+            display: block;
+          }
+        }
+        > .sf-table-head {
+          display: none;
+          & + * {
+            margin-top: 0;
+          }
+        }
+      }
     }
   }
 }
@@ -391,12 +453,6 @@ $size in $sizes {
     height: 100%;
     object-fit: cover;
   }
-}
-/// Prevent text overflow with ellipsis
-.no-text-overflow {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 @mixin width-rules ($p: "") {
   @each $size,
@@ -497,6 +553,18 @@ $border-directions: (
   #{$p}opacity-50 {
     opacity: .5;
   }
+  #{$p}white-space-initial {
+    white-space: initial;
+  }
+  #{$p}white-space-nowrap {
+    white-space: nowrap;
+  }
+  #{$p}vertical-align-middle {
+    vertical-align: middle;
+  }
+  #{$p}clear-both {
+    clear: both;
+  }
 }
 @mixin common-responsive-rules($p: ".") {
   @include width-rules($p);
@@ -512,6 +580,15 @@ $border-directions: (
   }
   #{$p}display-flex {
     display: flex;
+  }
+  #{$p}display-table {
+    display: table;
+  }
+  #{$p}display-table-row {
+    display: table-row;
+  }
+  #{$p}display-table-cell {
+    display: table-cell;
   }
   #{$p}overflow-auto {
     overflow: auto;
